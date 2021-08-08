@@ -1,7 +1,7 @@
 #![feature(once_cell)]
 use std::fs::File;
 use std::lazy::SyncLazy;
-use std::path::PathBuf;
+use std::path::Path;
 
 use image::error::ImageResult;
 
@@ -17,12 +17,20 @@ use image::imageops::resize;
 
 pub use image::imageops::FilterType;
 
+pub fn file_to_gif(input: impl AsRef<Path>, output: impl AsRef<Path>, speed: i32, filter: FilterType) -> ImageResult<()> {
+    let input_image = image::open(&input).expect("cannot read imput image").to_rgba8();
+    let frames = generate(input_image, filter).expect("cannot generate frames!");
+    encode_gif(frames, output, speed)?;
+    Ok(())
+}
+
 const FRAMES: u32 = 10;
 const RESOLUTION: (u32, u32) = (112, 112);
 const HANDS: SyncLazy<Vec<RgbaImage>> = SyncLazy::new(|| {
     (0..5)
         .map(|num| format!("{}.png", num))
         .map(|file| {
+            use std::path::PathBuf;
             let mut path = PathBuf::from(".");
             path.push("res");
             path.push(file);
@@ -99,10 +107,10 @@ pub fn generate(
 /// for details of speed, please see Servo's [documents][speed].
 pub fn encode_gif<'a>(
     frames: impl IntoIterator<Item = Frame>,
-    output: impl Into<PathBuf>,
+    output: impl AsRef<Path>,
     speed: i32
 ) -> ImageResult<()> {
-    let buf = File::create(output.into())?;
+    let buf = File::create(&output)?;
     let mut encoder = GifEncoder::new_with_speed(buf, speed);
     encoder.set_repeat(Repeat::Infinite)?;
     encoder.encode_frames(frames)?;
