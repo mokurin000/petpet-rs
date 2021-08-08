@@ -14,7 +14,7 @@ use image::codecs::gif::Repeat;
 use image::imageops::resize;
 use image::imageops::{overlay, FilterType};
 
-const FRAMES: u32 = 10;
+const FRAMES: u32 = 5;
 const RESOLUTION: (u32, u32) = (112, 112);
 const HANDS: SyncLazy<Vec<RgbaImage>> = SyncLazy::new(|| {
     (0..5)
@@ -56,7 +56,7 @@ pub fn generate(image: RgbaImage) -> ImageResult<impl IntoIterator<Item = Frame>
             offset_y,
         );
 
-        for (pixel_hand, pixel_canvas) in HANDS[i as usize / 2]
+        for (pixel_hand, pixel_canvas) in HANDS[i as usize]
             .pixels()
             .zip(resize_then_overlay.pixels_mut())
         {
