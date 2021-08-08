@@ -12,6 +12,8 @@ use image::{Rgba, RgbaImage};
 use image::codecs::gif::GifEncoder;
 use image::codecs::gif::Repeat;
 
+use image::imageops::crop;
+
 use imageproc::geometric_transformations;
 
 use geometric_transformations::translate;
@@ -41,19 +43,28 @@ pub fn generate(image: RgbaImage) -> ImageResult<impl IntoIterator<Item = Frame>
     let mut frame = Vec::<Frame>::new();
     for i in 0..FRAMES {
         let squeeze = if i < FRAMES / 2 { i } else { FRAMES - i } as f32;
+
         let width = squeeze * 0.02 + 0.8;
         let height = squeeze * 0.05 + 0.8;
-        let offset_x = ((1.0 - width) * 0.5 + 0.1) * RESOLUTION.0 as f32;
-        let offset_y = ((1.0 - height) - 0.08) * RESOLUTION.1 as f32;
-        let image = warp(
+
+        let offset_x = (((1.0 - width) * 0.5 + 0.1) * RESOLUTION.0 as f32) as u32;
+        let offset_y = (((1.0 - height) - 0.08) * RESOLUTION.1 as f32) as u32;
+
+        let size_x = RESOLUTION.0 - offset_x;
+        let size_y = RESOLUTION.1 - offset_y;
+
+        let mut image = warp(
             &image,
             &Projection::scale(width, height),
             Interpolation::Bicubic,
             Rgba([0, 0, 0, 0]),
-        );
+        ); // rescale image
+
+        let image = crop(&mut image, 0, 0, size_x, size_y); // crop
 
         let mut canvas = RgbaImage::new(RESOLUTION.0, RESOLUTION.1);
-        canvas.copy_from(&image, offset_x as _, offset_y as _)?;
+
+        canvas.copy_from(&image, offset_x, offset_y)?;
         canvas.copy_from(&HANDS[i as usize], 0, 0)?;
         frame.push(Frame::new(canvas));
     }
@@ -63,7 +74,7 @@ pub fn generate(image: RgbaImage) -> ImageResult<impl IntoIterator<Item = Frame>
 pub fn encode_gif<'a>(frames: impl IntoIterator<Item = Frame>, output: impl Into<PathBuf>) -> ImageResult<()> {
     let buf = File::create(output.into())?;
     let mut encoder = GifEncoder::new_with_speed(buf, 20);
-    encoder.encode_frames(frames)?;
     encoder.set_repeat(Repeat::Infinite)?;
+    encoder.encode_frames(frames)?;
     Ok(())
 }
