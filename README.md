@@ -4,8 +4,6 @@
 
 Also [petpet](https://github.com/camprevail/pet-pet-gif/), but in Rust.
 
-This program will perform correctly if [this PR](https://github.com/image-rs/image/pull/1532) merged to `image`.
-
 ## Usage
 
 ```bash

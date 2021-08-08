@@ -9,7 +9,7 @@ repository = "https://github.com/poly000/petpet-rs"
 default-run = "petpet"
 
 [dependencies]
-image = "0.23.14"
+image = { git = "https://github.com/poly000/image", branch = "master"}
 
 [profile.release]
 lto = true
