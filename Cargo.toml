@@ -14,4 +14,4 @@ image = { git = "https://github.com/poly000/image", branch = "master"}
 [profile.release]
 lto = true
 panic = "abort"
-# debug = true
+debug = true

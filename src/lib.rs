@@ -88,9 +88,10 @@ pub fn generate(
 pub fn encode_gif<'a>(
     frames: impl IntoIterator<Item = Frame>,
     output: impl Into<PathBuf>,
+    speed: i32
 ) -> ImageResult<()> {
     let buf = File::create(output.into())?;
-    let mut encoder = GifEncoder::new_with_speed(buf, 1);
+    let mut encoder = GifEncoder::new_with_speed(buf, speed);
     encoder.set_repeat(Repeat::Infinite)?;
     encoder.encode_frames(frames)?;
     Ok(())
