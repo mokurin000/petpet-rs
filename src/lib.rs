@@ -67,7 +67,7 @@ pub fn generate(image: RgbaImage, filter: FilterType) -> ImageResult<impl IntoIt
             .pixels()
             .zip(resize_then_overlay.pixels_mut())
         {
-            if let &Rgba([_, _, _, 0]) = pixel_hand {
+            if pixel_hand.0[3] != 0 {
                 *pixel_canvas = *pixel_hand;
             }
         }
