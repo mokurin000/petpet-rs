@@ -26,9 +26,7 @@ otherwise you will get an error like `Bad Signature`!
 I rewrite Petpet in Rust just due to Kotlin Version runs slowly and
 I don't know how to extract **[the code][kotlin_code]** generating petpet.
 
-- [ ] transparent background
-
-**Needing help**: idk how to use transparent background in image instead of the first frame.
+- [ ] transparent background: [#1](https://github.com/poly000/petpet-rs/issues/1)
 
 **[a terrible image example][example]**
 
