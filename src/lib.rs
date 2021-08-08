@@ -34,6 +34,9 @@ const HANDS: SyncLazy<Vec<RgbaImage>> = SyncLazy::new(|| {
         .collect()
 });
 
+/// Generate frames overlayed hands.
+///
+/// `image` is the Rgba8 Image to generate petpet.
 pub fn generate(
     image: RgbaImage,
     filter: FilterType,
@@ -85,6 +88,15 @@ pub fn generate(
     Ok(frames)
 }
 
+/// Encode Frame to GIF.
+///
+/// `frames` will encode as  GIF, 
+///
+/// `output` should be the path of the GIF file.
+///
+/// [speed]: https://doc.servo.org/color_quant/struct.NeuQuant.html#method.new
+///
+/// for details of speed, please see Servo's [documents][speed].
 pub fn encode_gif<'a>(
     frames: impl IntoIterator<Item = Frame>,
     output: impl Into<PathBuf>,
