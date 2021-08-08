@@ -7,7 +7,7 @@ Also [petpet](https://github.com/camprevail/pet-pet-gif/), but in Rust.
 ## Usage
 
 ```bash
-cargo run --release -- <input_image> <output_gif>
+cargo run --release -- <input_image> <output_gif> <encode_speed>
 ```
 
 Note that **format of the input image must be the same as suffix name explains**,
