@@ -1,14 +1,13 @@
 [package]
 authors = ["poly000 <pedajilao@vip.qq.com>"]
 license = "MIT"
-description = "Pet-pet generator in Rust. Translated from https://github.com/camprevail/pet-pet-gif. These code does not works!"
+description = "Pet-pet generator in Rust. Translated from https://github.com/camprevail/pet-pet-gif."
 name = "petpet"
-version = "0.2.3"
+version = "0.3.0"
 edition = "2018"
 repository = "https://github.com/poly000/petpet-rs"
 
 [dependencies]
-imageproc = "0.22.0"
 image = "0.23.14"
 
 [profile.release]
