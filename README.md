@@ -28,6 +28,6 @@ I don't know how to extract **[the code][kotlin_code]** generating petpet.
 
 **Needing help**: idk how to use transparent background in image instead of the first frame.
 
-**[the terrible image example][example]**
+**[a terrible image example][example]**
 
 Now I just **[added a white background][bad_solution]**.
