@@ -16,7 +16,7 @@ use image::imageops::resize;
 use image::imageops::{overlay, FilterType};
 
 const FRAMES: u32 = 10;
-const RESOLUTION: (u32, u32) = (128, 128);
+const RESOLUTION: (u32, u32) = (112, 112);
 const HANDS: SyncLazy<Vec<RgbaImage>> = SyncLazy::new(|| {
     (0..5)
         .map(|num| format!("{}.png", num))
