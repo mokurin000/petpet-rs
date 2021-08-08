@@ -51,7 +51,7 @@ pub fn generate(image: RgbaImage) -> ImageResult<impl IntoIterator<Item = Frame>
 
         let mut resize_then_overlay = RgbaImage::new(RESOLUTION.0, RESOLUTION.1);
         resize_then_overlay.pixels_mut().for_each(|pixel| *pixel = Rgba([255, 255, 255, 255]));
-        // I don't know how to disable GIF's functionality that paste on afterimage.
+        // I don't know how to rid each frame in GIFEncoder
         // So alternatively I just write a white bottom.
 
         overlay(
