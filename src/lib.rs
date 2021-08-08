@@ -65,7 +65,7 @@ pub fn generate(image: RgbaImage) -> ImageResult<impl IntoIterator<Item = Frame>
         let mut canvas = RgbaImage::new(RESOLUTION.0, RESOLUTION.1);
 
         canvas.copy_from(&image, offset_x, offset_y)?;
-        canvas.copy_from(&HANDS[i as usize], 0, 0)?;
+        canvas.copy_from(&HANDS[ i as usize / 2 ], 0, 0)?;
         frame.push(Frame::new(canvas));
     }
     Ok(frame)
