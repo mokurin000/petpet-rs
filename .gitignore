@@ -1,7 +1,7 @@
 /target
-.vscode
-test.gif
-./flamegraph.svg
-./perf.data
-./perf.data.old
+/.vscode
+/test.gif
+/flamegraph.svg
+/perf.data
+/perf.data.old
 
