@@ -17,3 +17,5 @@ otherwise you will get an error like `Bad Signature`!
 ## Todo
 
 - [x] transparent background: [#1](https://github.com/poly000/petpet-rs/issues/1)
+
+- [ ] Upload v1.0.0 to crates.io: [#2](https://github.com/poly000/petpet-rs/issues/2)
