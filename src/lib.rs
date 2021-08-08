@@ -1,7 +1,6 @@
 #![feature(once_cell)]
 use std::fs::File;
-use std::lazy::Lazy;
-use std::mem::MaybeUninit;
+use std::lazy::SyncLazy;
 use std::path::PathBuf;
 
 use image::error::ImageResult;
@@ -24,9 +23,8 @@ use geometric_transformations::Projection;
 
 const FRAMES: u32 = 10;
 const RESOLUTION: (u32, u32) = (112, 112);
-const HANDS: Lazy<[RgbaImage; 5]> = Lazy::new(|| {
-    let mut re: [RgbaImage; 5] = unsafe { MaybeUninit::uninit().assume_init() };
-    for (index, image) in (0..5)
+const HANDS: SyncLazy<Vec<RgbaImage>> = SyncLazy::new(|| {
+    (0..5)
         .map(|num| format!("{}.png", num))
         .map(|file| {
             let mut path = PathBuf::from(".");
@@ -37,12 +35,7 @@ const HANDS: Lazy<[RgbaImage; 5]> = Lazy::new(|| {
                 .expect(&format!("Could not load image at {:?}", path))
                 .to_rgba8()
         })
-        .enumerate()
-    {
-        re[index] = image;
-    }
-
-    re
+        .collect()
 });
 
 pub fn generate(image: RgbaImage) -> ImageResult<impl IntoIterator<Item = Frame>> {
@@ -72,18 +65,19 @@ pub fn generate(image: RgbaImage) -> ImageResult<impl IntoIterator<Item = Frame>
         let mut canvas = RgbaImage::new(RESOLUTION.0, RESOLUTION.1);
 
         canvas.copy_from(&image, offset_x, offset_y)?;
-        canvas.copy_from(&HANDS[i as usize / 2], 0, 0)?;
+        for (pixel_hand, pixel_canvas) in HANDS[i as usize / 2].pixels().zip(canvas.pixels_mut()) {
+            if pixel_hand != &Rgba([0, 0,0,0]) {
+                *pixel_canvas = *pixel_hand;
+            }
+        }
         frame.push(Frame::new(canvas));
     }
     Ok(frame)
 }
 
-pub fn encode_gif<'a>(
-    frames: impl IntoIterator<Item = Frame>,
-    output: impl Into<PathBuf>,
-) -> ImageResult<()> {
+pub fn encode_gif<'a>(frames: impl IntoIterator<Item = Frame>, output: impl Into<PathBuf>) -> ImageResult<()> {
     let buf = File::create(output.into())?;
-    let mut encoder = GifEncoder::new_with_speed(buf, 20);
+    let mut encoder = GifEncoder::new_with_speed(buf, 1);
     encoder.set_repeat(Repeat::Infinite)?;
     encoder.encode_frames(frames)?;
     Ok(())

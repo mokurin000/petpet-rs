@@ -1,9 +1,9 @@
 [package]
 authors = ["poly000 <pedajilao@vip.qq.com>"]
 license = "MIT"
-description = "Pet-pet generator in Rust. Translated from https://github.com/camprevail/pet-pet-gif"
+description = "Pet-pet generator in Rust. Translated from https://github.com/camprevail/pet-pet-gif. These code does not works!"
 name = "petpet"
-version = "0.2.2"
+version = "0.2.3"
 edition = "2018"
 repository = "https://github.com/poly000/petpet-rs"
 
