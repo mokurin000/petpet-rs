@@ -13,7 +13,9 @@ use image::codecs::gif::Repeat;
 use image::Delay;
 
 use image::imageops::resize;
-use image::imageops::{overlay, FilterType};
+use image::imageops::overlay;
+
+pub use image::imageops::FilterType as FilterType;
 
 const FRAMES: u32 = 10;
 const RESOLUTION: (u32, u32) = (112, 112);
@@ -32,7 +34,7 @@ const HANDS: SyncLazy<Vec<RgbaImage>> = SyncLazy::new(|| {
         .collect()
 });
 
-pub fn generate(image: RgbaImage) -> ImageResult<impl IntoIterator<Item = Frame>> {
+pub fn generate(image: RgbaImage, filter: FilterType) -> ImageResult<impl IntoIterator<Item = Frame>> {
     let mut frames = Vec::<Frame>::new();
 
     for i in 0..FRAMES {
@@ -47,7 +49,7 @@ pub fn generate(image: RgbaImage) -> ImageResult<impl IntoIterator<Item = Frame>
         let offset_x = (((1.0 - width_scale) * 0.5 + 0.1) * RESOLUTION.0 as f64) as u32;
         let offset_y = (((1.0 - height_scale) - 0.08) * RESOLUTION.1 as f64) as u32;
 
-        let calucate_then_resize = resize(&image, width, height, FilterType::Lanczos3);
+        let calucate_then_resize = resize(&image, width, height, filter);
 
         let mut resize_then_overlay = RgbaImage::new(RESOLUTION.0, RESOLUTION.1);
         resize_then_overlay.pixels_mut().for_each(|pixel| *pixel = Rgba([255, 255, 255, 255]));
