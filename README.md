@@ -10,6 +10,8 @@ Also [petpet](https://github.com/camprevail/pet-pet-gif/), but in Rust.
 cargo run --release -- <input_image> <output_gif> <encode_speed>
 ```
 
+**[details about encode_speed](https://doc.servo.org/color_quant/struct.NeuQuant.html#method.new)**
+
 Note that **format of the input image must be the same as suffix name explains**,
 
 otherwise you will get an error like `Bad Signature`!
