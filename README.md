@@ -1,5 +1,7 @@
 # petpet-rs
 
+[![crates.io](https://img.shields.io/crates/v/petpet.svg)](https://crates.io/crates/petpet)
+
 Also [petpet](https://github.com/camprevail/pet-pet-gif/), but in Rust.
 
 ## Usage
