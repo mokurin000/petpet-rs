@@ -15,8 +15,8 @@ use image::Delay;
 use image::imageops::resize;
 use image::imageops::{overlay, FilterType};
 
-const FRAMES: u32 = 5;
-const RESOLUTION: (u32, u32) = (112, 112);
+const FRAMES: u32 = 10;
+const RESOLUTION: (u32, u32) = (128, 128);
 const HANDS: SyncLazy<Vec<RgbaImage>> = SyncLazy::new(|| {
     (0..5)
         .map(|num| format!("{}.png", num))
@@ -37,8 +37,8 @@ pub fn generate(image: RgbaImage) -> ImageResult<impl IntoIterator<Item = Frame>
     for i in 0..FRAMES {
         let squeeze = if i < FRAMES / 2 { i } else { FRAMES - i } as f64;
 
-        let width_scale = squeeze * 0.02 + 0.8;
-        let height_scale = squeeze * 0.05 + 0.8;
+        let width_scale = 0.8 + squeeze * 0.02;
+        let height_scale = 0.8 - squeeze * 0.05;
 
         let width = (width_scale * RESOLUTION.0 as f64) as u32;
         let height = (height_scale * RESOLUTION.1 as f64) as u32;
@@ -57,7 +57,7 @@ pub fn generate(image: RgbaImage) -> ImageResult<impl IntoIterator<Item = Frame>
             offset_y,
         );
 
-        for (pixel_hand, pixel_canvas) in HANDS[i as usize]
+        for (pixel_hand, pixel_canvas) in HANDS[i as usize / 2]
             .pixels()
             .zip(resize_then_overlay.pixels_mut())
         {
@@ -66,8 +66,8 @@ pub fn generate(image: RgbaImage) -> ImageResult<impl IntoIterator<Item = Frame>
             }
         }
 
-        const DENOM_MS: u32 = 20 / FRAMES;
-        let overlay_then_delay = Frame::from_parts(resize_then_overlay, 0, 0, Delay::from_numer_denom_ms(DENOM_MS, 1));
+        const DELAY: u32 = 20;
+        let overlay_then_delay = Frame::from_parts(resize_then_overlay, 0, 0, Delay::from_numer_denom_ms(DELAY, 1));
 
         frames.push(overlay_then_delay);
     }
