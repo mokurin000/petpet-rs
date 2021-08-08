@@ -10,6 +10,7 @@ use image::{Rgba, RgbaImage};
 
 use image::codecs::gif::GifEncoder;
 use image::codecs::gif::Repeat;
+use image::Delay;
 
 use image::imageops::resize;
 use image::imageops::{overlay, FilterType};
@@ -32,7 +33,7 @@ const HANDS: SyncLazy<Vec<RgbaImage>> = SyncLazy::new(|| {
 });
 
 pub fn generate(image: RgbaImage) -> ImageResult<impl IntoIterator<Item = Frame>> {
-    let mut frame = Vec::<Frame>::new();
+    let mut frames = Vec::<Frame>::new();
     for i in 0..FRAMES {
         let squeeze = if i < FRAMES / 2 { i } else { FRAMES - i } as f64;
 
@@ -65,11 +66,12 @@ pub fn generate(image: RgbaImage) -> ImageResult<impl IntoIterator<Item = Frame>
             }
         }
 
-        let overlay_then_push = resize_then_overlay;
+        const DENOM_MS: u32 = 20 / FRAMES;
+        let overlay_then_delay = Frame::from_parts(resize_then_overlay, 0, 0, Delay::from_numer_denom_ms(DENOM_MS, 1));
 
-        frame.push(Frame::new(overlay_then_push));
+        frames.push(overlay_then_delay);
     }
-    Ok(frame)
+    Ok(frames)
 }
 
 pub fn encode_gif<'a>(
@@ -77,7 +79,7 @@ pub fn encode_gif<'a>(
     output: impl Into<PathBuf>,
 ) -> ImageResult<()> {
     let buf = File::create(output.into())?;
-    let mut encoder = GifEncoder::new_with_speed(buf, 3);
+    let mut encoder = GifEncoder::new_with_speed(buf, 1);
     encoder.set_repeat(Repeat::Infinite)?;
     encoder.encode_frames(frames)?;
     Ok(())
