@@ -26,7 +26,7 @@ I don't know how to extract **[the code][kotlin_code]** generating petpet.
 
 - [ ] transparent background
 
-**Needing help**: idk how to make [GIFEncoder] in `image` seperate each frames.
+**Needing help**: idk how to use transparent background in image instead of the first frame.
 
 **[the terrible image example][example]**
 
