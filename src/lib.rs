@@ -6,7 +6,7 @@ use std::path::PathBuf;
 use image::error::ImageResult;
 
 use image::Frame;
-use image::{Rgba, RgbaImage};
+use image::RgbaImage;
 
 use image::codecs::gif::GifEncoder;
 use image::codecs::gif::Repeat;
@@ -55,11 +55,6 @@ pub fn generate(
         let calucate_then_resize = resize(&image, width, height, filter);
 
         let mut resize_then_overlay = RgbaImage::new(RESOLUTION.0, RESOLUTION.1);
-        resize_then_overlay
-            .pixels_mut()
-            .for_each(|pixel| *pixel = Rgba([255, 255, 255, 255]));
-        // I don't know how to set a transparent background
-        // So alternatively I just write a white bottom.
 
         overlay(
             &mut resize_then_overlay,
