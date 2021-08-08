@@ -12,10 +12,10 @@ use image::codecs::gif::GifEncoder;
 use image::codecs::gif::Repeat;
 use image::Delay;
 
-use image::imageops::resize;
 use image::imageops::overlay;
+use image::imageops::resize;
 
-pub use image::imageops::FilterType as FilterType;
+pub use image::imageops::FilterType;
 
 const FRAMES: u32 = 10;
 const RESOLUTION: (u32, u32) = (112, 112);
@@ -34,7 +34,10 @@ const HANDS: SyncLazy<Vec<RgbaImage>> = SyncLazy::new(|| {
         .collect()
 });
 
-pub fn generate(image: RgbaImage, filter: FilterType) -> ImageResult<impl IntoIterator<Item = Frame>> {
+pub fn generate(
+    image: RgbaImage,
+    filter: FilterType,
+) -> ImageResult<impl IntoIterator<Item = Frame>> {
     let mut frames = Vec::<Frame>::new();
 
     for i in 0..FRAMES {
@@ -52,7 +55,9 @@ pub fn generate(image: RgbaImage, filter: FilterType) -> ImageResult<impl IntoIt
         let calucate_then_resize = resize(&image, width, height, filter);
 
         let mut resize_then_overlay = RgbaImage::new(RESOLUTION.0, RESOLUTION.1);
-        resize_then_overlay.pixels_mut().for_each(|pixel| *pixel = Rgba([255, 255, 255, 255]));
+        resize_then_overlay
+            .pixels_mut()
+            .for_each(|pixel| *pixel = Rgba([255, 255, 255, 255]));
         // I don't know how to set a transparent background
         // So alternatively I just write a white bottom.
 
@@ -73,7 +78,12 @@ pub fn generate(image: RgbaImage, filter: FilterType) -> ImageResult<impl IntoIt
         }
 
         const DELAY: u32 = 20;
-        let overlay_then_delay = Frame::from_parts(resize_then_overlay, 0, 0, Delay::from_numer_denom_ms(DELAY, 1));
+        let overlay_then_delay = Frame::from_parts(
+            resize_then_overlay,
+            0,
+            0,
+            Delay::from_numer_denom_ms(DELAY, 1),
+        );
 
         frames.push(overlay_then_delay);
     }
