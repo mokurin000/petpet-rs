@@ -1,3 +1,7 @@
 /target
 .vscode
 test.gif
+./flamegraph.svg
+./perf.data
+./perf.data.old
+
