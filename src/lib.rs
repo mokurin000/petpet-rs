@@ -16,7 +16,7 @@ use image::imageops::overlay;
 use image::imageops::resize;
 
 pub use image::imageops::FilterType;
-pub use image::imageops::ImageResult;
+pub use image::ImageResult;
 
 pub fn file_to_gif(input: impl AsRef<Path>, output: impl AsRef<Path>, speed: i32, filter: FilterType) -> ImageResult<()> {
     let input_image = image::open(&input).expect("cannot read imput image").to_rgba8();
