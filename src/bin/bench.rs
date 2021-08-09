@@ -9,7 +9,7 @@ fn main(){
     let speed = env::args().nth(3).expect("speed is required!").parse().unwrap();
 
 
-    for _ in 0..100 {
+    for _ in 0..1000 {
         file_to_gif(&input, &output, speed, FilterType::Lanczos3).unwrap();
     }
 }
