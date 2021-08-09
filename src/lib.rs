@@ -6,7 +6,7 @@ use std::path::Path;
 use image::error::ImageResult;
 
 use image::Frame;
-use image::RgbaImage;
+use image::{Rgba, RgbaImage};
 
 use image::codecs::gif::GifEncoder;
 use image::codecs::gif::Repeat;
@@ -78,7 +78,7 @@ pub fn generate(
             .pixels()
             .zip(resize_then_overlay.pixels_mut())
         {
-            if pixel_hand.0[3] != 0 {
+            if ! matches!(pixel_hand, Rgba([_, _, _, 0])) {
                 *pixel_canvas = *pixel_hand;
             }
         }
