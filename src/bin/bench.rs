@@ -10,6 +10,6 @@ fn main(){
 
 
     for _ in 0..100 {
-        file_to_gif(&input, &output, speed, FilterType::Triangle).unwrap();
+        file_to_gif(&input, &output, speed, FilterType::Lanczos3).unwrap();
     }
 }
