@@ -33,12 +33,12 @@ jobs:
           - platform: windows_32
             target: i686-pc-windows-msvc
             os: windows-latest
-            bin: petpet
+            bin: petpet.exe
             
           - platform: windows_64
             target: x86_64-pc-windows-msvc
             os: windows-latest
-            bin: petpet
+            bin: petpet.exe
             
     steps:
       - name: Install toolchain
