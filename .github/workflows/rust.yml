@@ -76,8 +76,16 @@ jobs:
         with:
           name: ${{ matrix.target }}
           path: target/${{ matrix.target }}/release/${{ matrix.target }}-${{ matrix.bin }}
+          
+      - name: Declare some variables # https://stackoverflow.com/a/61699863
+        id: vars
+        shell: bash
+        run: |
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+          
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ matrix.target }}-${{ matrix.bin }}
+          tag_name: 2.0.0-${{ steps.vars.outputs.sha_short }}
           prerelease: true
