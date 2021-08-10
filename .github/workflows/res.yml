@@ -40,13 +40,13 @@ jobs:
       - name: Prepare assets
         shell: bash
         run : |
-          tar cvfz resources.tar res
+          tar cvfz any-resources.tar res
 
       - name: Pre-Release
         uses: softprops/action-gh-release@v1
         if: ${{ steps.vars.outputs.push_pre-release }} == "true"
         with:
-          files: resources.tar
+          files: any-resources.tar
           tag_name: 2.0.0-${{ steps.vars.outputs.sha_short }}
           prerelease: true
 
@@ -55,6 +55,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: ${{ steps.vars.outputs.push_release }} == "true"
         with:
-          files: resources.tar
+          files: any-resources.tar
           tag_name: 2.0.0-${{ steps.vars.outputs.sha_short }}
           prerelease: false
