@@ -78,6 +78,6 @@ jobs:
           path: target/${{ matrix.target }}/release/${{ matrix.target }}-${{ matrix.bin }}
       - name: Release
         uses: softprops/action-gh-release@v1
-          if: startsWith(github.ref, 'refs/tags/')
-          with:
-            files: ${{ matrix.target }}-${{ matrix.bin }}
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{ matrix.target }}-${{ matrix.bin }}
