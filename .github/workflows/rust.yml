@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        platform: [macos-x86_64, linux_glibc, linux_musl-x86_64, linux_musl-i686,  windows-i686, windows-x86_64, res]
+        platform: [macos-x86_64, linux_glibc, linux_musl-x86_64, linux_musl-i686,  windows-i686, windows-x86_64]
         include:
         
           - platform: macos-x86_64
@@ -45,14 +45,8 @@ jobs:
             os: windows-latest
             bin: petpet.exe
             
-          - platform: res
-            target: any
-            os: ubuntu-latest
-            bin: none
-            
     steps:
       - name: Install toolchain
-        if: ${{ matrix.platform }} != res
         uses: actions-rs/toolchain@v1
         with:
           target: ${{ matrix.target }}
@@ -63,7 +57,6 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Run code build
-        if: ${{ matrix.platform }} != res
         uses: actions-rs/cargo@v1
         with:
           toolchain: nightly
@@ -71,7 +64,6 @@ jobs:
           args: --release --target ${{ matrix.target }}
 
       - name: Prepare assets
-        if: ${{ matrix.platform }} != res
         shell: bash
         run: |
           cd target/${{ matrix.target }}/release
@@ -79,9 +71,7 @@ jobs:
           then strip ${{ matrix.bin }}
           fi
           mv ${{ matrix.bin }} ${{ matrix.target }}-${{ matrix.bin }}
-
       - name: Upload artifact
-        if: ${{ matrix.platform }} != res
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.target }}
@@ -105,7 +95,7 @@ jobs:
 
       - name: Pre-Release
         uses: softprops/action-gh-release@v1
-        if: ${{ steps.vars.outputs.push_pre-release }} && ${{ matrix.platform }} != res
+        if: ${{ steps.vars.outputs.push_pre-release }} == "true"
         with:
           files: target/${{ matrix.target }}/release/${{ matrix.target }}-${{ matrix.bin }}
           tag_name: 2.0.0-${{ steps.vars.outputs.sha_short }}
@@ -114,30 +104,8 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: ${{ steps.vars.outputs.push_release }} && ${{ matrix.platform }} != res
+        if: ${{ steps.vars.outputs.push_release }} == "true"
         with:
           files: target/${{ matrix.target }}/release/${{ matrix.target }}-${{ matrix.bin }}
           tag_name: 2.0.0-${{ steps.vars.outputs.sha_short }}
           prerelease: false
-
-      - name: Prepare Resources
-        if: ${{ matrix.platform }} == res
-        shell: bash
-        run: |
-          tar cvf resources.tar res
-
-      - name: Release Resources
-        uses: softprops/action-gh-release@v1
-        if: ${{ steps.vars.outputs.push_release }} && ${{ matrix.platform }} == res
-        with:
-          files: resources.tar
-          tag_name: 2.0.0-${{ steps.vars.outputs.sha_short }}
-          prerelease: false
-
-      - name: Pre-Release Resources
-        uses: softprops/action-gh-release@v1
-        if: ${{ steps.vars.outputs.push_pre-release }} && ${{ matrix.platform }} == res
-        with:
-          files: resources.tar
-          tag_name: 2.0.0-${{ steps.vars.outputs.sha_short }}
-          prerelease: true
