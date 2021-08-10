@@ -4,6 +4,16 @@
 
 Also [petpet](https://github.com/camprevail/pet-pet-gif/), but in Rust.
 
+## Download
+
+[Actions] retains Canary build for **90 days**.
+
+## Build
+
+```bash
+cargo +nightly build --release
+```
+
 ## Usage
 
 ```bash
