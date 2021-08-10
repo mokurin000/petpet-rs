@@ -25,7 +25,7 @@ pub fn file_to_gif(input: impl AsRef<Path>, output: impl AsRef<Path>, speed: i32
 
 const FRAMES: u32 = 10;
 const RESOLUTION: (u32, u32) = (112, 112);
-const HANDS: SyncLazy<Vec<RgbaImage>> = SyncLazy::new(|| {
+static HANDS: SyncLazy<Vec<RgbaImage>> = SyncLazy::new(|| {
     (0..5)
         .map(|num| format!("{}.png", num))
         .map(|file| {
@@ -35,7 +35,7 @@ const HANDS: SyncLazy<Vec<RgbaImage>> = SyncLazy::new(|| {
             path.push(file);
 
             image::open(&path)
-                .expect(&format!("Could not load image at {:?}", path))
+                .unwrap_or_else(|_| panic!("Could not load image at {:?}", path))
                 .to_rgba8()
         })
         .collect()
@@ -104,7 +104,7 @@ pub fn generate(
 /// [speed]: https://doc.servo.org/color_quant/struct.NeuQuant.html#method.new
 ///
 /// for details of speed, please see Servo's [documents][speed].
-pub fn encode_gif<'a>(
+pub fn encode_gif (
     frames: impl IntoIterator<Item = Frame>,
     output: impl AsRef<Path>,
     speed: i32
