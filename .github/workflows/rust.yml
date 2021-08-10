@@ -83,9 +83,28 @@ jobs:
         run: |
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
           
-      - name: Release
+          if [[ "${{ github.event.head_commit.message }}" == "[res]*" ]]
+          then echo "::set-output name=push_release::true"
+          else echo "::set-output name=push_release::false"
+          fi
+          
+          if [[ "${{ github.event.head_commit.message }}" == "[pre]*" ]]
+          then echo "::set-output name=push_pre-release::true"
+          else echo "::set-output name=push_pre-release::false"
+          fi
+
+      - name: Pre-Release
         uses: softprops/action-gh-release@v1
+        if: ${{ steps.vars.outputs.push_pre-release }} == "true"
         with:
           files: target/${{ matrix.target }}/release/${{ matrix.target }}-${{ matrix.bin }}
           tag_name: 2.0.0-${{ steps.vars.outputs.sha_short }}
           prerelease: true
+
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: ${{ steps.vars.outputs.push_release }} == "true"
+        with:
+          files: target/${{ matrix.target }}/release/${{ matrix.target }}-${{ matrix.bin }}
+          tag_name: 2.0.0-${{ steps.vars.outputs.sha_short }}
