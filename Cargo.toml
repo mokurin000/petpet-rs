@@ -12,6 +12,7 @@ default-run = "petpet"
 image = { git = "https://github.com/poly000/image", branch = "master"}
 
 [profile.release]
+codegen-units = 1
 lto = true
 panic = "abort"
 # debug = true
