@@ -70,8 +70,14 @@ jobs:
           if [[ ${{ matrix.target }} != x86_64-apple-darwin ]]
           then strip ${{ matrix.bin }}
           fi
+          mv ${{ matrix.bin }} ${{ matrix.target }}-${{ matrix.bin }}
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.target }}
-          path: target/${{ matrix.target }}/release/${{ matrix.bin }}
+          path: target/${{ matrix.target }}/release/${{ matrix.target }}-${{ matrix.bin }}
+      - name: Release
+        uses: softprops/action-gh-release@v1
+          if: startsWith(github.ref, 'refs/tags/')
+          with:
+            files: ${{ matrix.target }}-${{ matrix.bin }}
