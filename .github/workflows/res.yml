@@ -47,7 +47,7 @@ jobs:
         if: ${{ steps.vars.outputs.push_pre-release }} == "true"
         with:
           files: any-resources.tar
-          tag_name: 2.0.0-${{ steps.vars.outputs.sha_short }}
+          tag_name: 2.0.1-${{ steps.vars.outputs.sha_short }}
           prerelease: true
 
 
@@ -56,5 +56,5 @@ jobs:
         if: ${{ steps.vars.outputs.push_release }} == "true"
         with:
           files: any-resources.tar
-          tag_name: 2.0.0-${{ steps.vars.outputs.sha_short }}
+          tag_name: 2.0.1
           prerelease: false
