@@ -12,11 +12,16 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        platform: [macos, linux_glibc, linux_musl, windows_32, windows_64]
+        platform: [macos-x86_64, macos-arm64, linux_glibc, linux_musl-x86_64, linux_musl-i686,  windows_32, windows_64]
         include:
         
-          - platform: macos
+          - platform: macos-x86_64
             target: x86_64-apple-darwin
+            os: macos-latest
+            bin: petpet
+        
+          - platform: macos-arm64
+            target: aarch64-apple-darwin
             os: macos-latest
             bin: petpet
 
@@ -25,8 +30,13 @@ jobs:
             os: ubuntu-latest
             bin: petpet
             
-          - platform: linux_musl
+          - platform: linux_musl-x86_64
             target: x86_64-unknown-linux-musl
+            os: ubuntu-latest
+            bin: petpet
+        
+          - platform: linux_musl-i686
+            target: i686-unknown-linux-musl
             os: ubuntu-latest
             bin: petpet
             
