@@ -6,7 +6,7 @@ Also [petpet](https://github.com/camprevail/pet-pet-gif/), but in Rust.
 
 ## Download
 
-[Actions] retains Canary build for **90 days**.
+You can download "Pre-releases" in [releases](https://github.com/poly000/petpet-rs/releases) page.
 
 ## Build
 
