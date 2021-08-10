@@ -107,5 +107,5 @@ jobs:
         if: ${{ steps.vars.outputs.push_release }} == "true"
         with:
           files: target/${{ matrix.target }}/release/${{ matrix.target }}-${{ matrix.bin }}
-          tag_name: 2.0.1
+          tag_name: 2.0.1-${{ steps.vars.outputs.sha_short }}
           prerelease: false
