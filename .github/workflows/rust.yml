@@ -56,7 +56,7 @@ jobs:
         with:
           toolchain: nightly
           command: build
-          args: --release --target ${{ matrix.target }} --bin ${{ matrix.bin }}
+          args: --release --target ${{ matrix.target }}
 
       - name: Prepare assets
         shell: bash
