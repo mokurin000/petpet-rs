@@ -5,6 +5,8 @@ use petpet::FilterType;
 
 fn main() {
     let mut args = env::args();
+    args.next();
+    
     let input = args.next().expect("input file is required!");
     let output = args.next().expect("output file is required!");
     let speed = args.next().expect("speed is required!").parse().unwrap();

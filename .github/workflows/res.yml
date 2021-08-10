@@ -50,7 +50,6 @@ jobs:
           tag_name: 2.0.1-${{ steps.vars.outputs.sha_short }}
           prerelease: true
 
-
       - name: Release
         uses: softprops/action-gh-release@v1
         if: ${{ steps.vars.outputs.push_release }} == "true"
