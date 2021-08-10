@@ -108,3 +108,4 @@ jobs:
         with:
           files: target/${{ matrix.target }}/release/${{ matrix.target }}-${{ matrix.bin }}
           tag_name: 2.0.0-${{ steps.vars.outputs.sha_short }}
+          prerelease: false
