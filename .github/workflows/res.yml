@@ -1,0 +1,60 @@
+# Origin config by @Kilerd
+
+name: Release Resources
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  release:
+    name: Release on ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        platform: [none]
+        include:
+          - platform: none
+            os: ubuntu-latest
+            
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Declare some variables # https://stackoverflow.com/a/61699863
+        id: vars
+        shell: bash
+        run: |
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+          
+          if [[ "${{ github.event.head_commit.message }}" == "[res]*" ]]
+          then echo "::set-output name=push_release::true"
+          else echo "::set-output name=push_release::false"
+          fi
+          
+          if [[ "${{ github.event.head_commit.message }}" == "[pre]*" ]]
+          then echo "::set-output name=push_pre-release::true"
+          else echo "::set-output name=push_pre-release::false"
+          fi
+
+      - name: Prepare assets
+        shell: bash
+        run : |
+          tar cvfz resources.tar res
+
+      - name: Pre-Release
+        uses: softprops/action-gh-release@v1
+        if: ${{ steps.vars.outputs.push_pre-release }} == "true"
+        with:
+          files: resources.tar
+          tag_name: 2.0.0-${{ steps.vars.outputs.sha_short }}
+          prerelease: true
+
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: ${{ steps.vars.outputs.push_release }} == "true"
+        with:
+          files: resources.tar
+          tag_name: 2.0.0-${{ steps.vars.outputs.sha_short }}
+          prerelease: false
