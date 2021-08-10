@@ -6,7 +6,7 @@ Also [petpet](https://github.com/camprevail/pet-pet-gif/), but in Rust.
 
 ## Download
 
-You can download the latest releases from [releases](https://github.com/poly000/petpet-rs/releases) page.
+You can download the latest release from [releases](https://github.com/poly000/petpet-rs/releases) page.
 
 ## Build
 
