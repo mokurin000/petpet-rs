@@ -81,14 +81,15 @@ jobs:
         id: vars
         shell: bash
         run: |
+          echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
           
-          if [[ "${{ github.event.head_commit.message }}" == "[res]*" ]]
+          if [[ "${{ github.event.head_commit.message }}" == "\[res]*" ]]
           then echo "::set-output name=push_release::true"
           else echo "::set-output name=push_release::false"
           fi
           
-          if [[ "${{ github.event.head_commit.message }}" == "[pre]*" ]]
+          if [[ "${{ github.event.head_commit.message }}" == "\[pre]*" ]]
           then echo "::set-output name=push_pre-release::true"
           else echo "::set-output name=push_pre-release::false"
           fi
