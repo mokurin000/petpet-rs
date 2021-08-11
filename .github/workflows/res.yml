@@ -40,7 +40,7 @@ jobs:
       - name: Prepare assets
         shell: bash
         run : |
-          tar cvfz any-resources.tar res
+          tar cvfz any-resources.tar res img
 
       - name: Pre-Release
         uses: softprops/action-gh-release@v1
