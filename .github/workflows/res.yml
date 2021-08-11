@@ -30,11 +30,11 @@ jobs:
       - name: Prepare assets
         shell: bash
         run : |
-          tar cvfz any-resources.tar res img
+          tar cvfz any-resources.tar.gz res img
 
       - name: Pre-Release
         uses: softprops/action-gh-release@v1
         with:
-          files: any-resources.tar
+          files: any-resources.tar.gz
           tag_name: 2.0.1-${{ steps.vars.outputs.sha_short }}
           prerelease: true
