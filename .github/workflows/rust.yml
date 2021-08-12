@@ -66,16 +66,12 @@ jobs:
       - name: Prepare assets
         shell: bash
         run: |
-          cd target/${{ matrix.target }}/release
+          mv target/${{ matrix.target }}/release/${{ matrix.bin }} .
           if [[ ${{ matrix.target }} != x86_64-apple-darwin ]]
           then strip ${{ matrix.bin }}
           fi
-          mv ${{ matrix.bin }} ${{ matrix.target }}-${{ matrix.bin }}
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ matrix.target }}
-          path: target/${{ matrix.target }}/release/${{ matrix.target }}-${{ matrix.bin }}
+          
+          zip -9 ${{ matrix.target }}.zip orig LICENSE.txt res ${{ matrix.bin }}
           
       - name: Declare some variables # https://stackoverflow.com/a/61699863
         id: vars
@@ -86,7 +82,7 @@ jobs:
       - name: Pre-Release
         uses: softprops/action-gh-release@v1
         with:
-          files: target/${{ matrix.target }}/release/${{ matrix.target }}-${{ matrix.bin }}
+          files: ${{ matrix.target }}.zip
           tag_name: 2.0.1-${{ steps.vars.outputs.sha_short }}
           prerelease: true
 
