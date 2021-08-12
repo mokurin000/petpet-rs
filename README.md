@@ -4,6 +4,8 @@
 
 Also [petpet](https://github.com/camprevail/pet-pet-gif/), but in Rust.
 
+**Note:** crates.io's version is outdated.
+
 ## Download
 
 You can download the latest release from [releases](https://github.com/poly000/petpet-rs/releases) page.
