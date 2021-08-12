@@ -87,6 +87,7 @@ jobs:
       - name: Pre-Release
         uses: softprops/action-gh-release@v1
         with:
+          body_path: body.md
           files: ${{ matrix.target }}.tar
           tag_name: 2.0.1-${{ steps.vars.outputs.sha_short }}
           prerelease: true
