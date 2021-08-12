@@ -4,6 +4,10 @@
 
 Also [petpet](https://github.com/camprevail/pet-pet-gif/), but in Rust.
 
+The default hands' images were credited by [PetPet Generator](https://benisland.neocities.org/petpet/).
+
+[Here](https://github.com/awesome-petpet-hands) you can download more custom hands.
+
 **Note:** crates.io's version is outdated.
 
 ## Download
