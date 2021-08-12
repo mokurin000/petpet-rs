@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        platform: [macos-x86_64, linux_glibc-x86_64, linux_glibc-i686, linux_musl-x86_64, linux_musl-i686,  windows-i686, windows-x86_64]
+        platform: [macos-x86_64, linux_glibc-x86_64, linux_musl-x86_64, linux_musl-i686,  windows-i686, windows-x86_64]
         include:
         
           - platform: macos-x86_64
@@ -22,11 +22,6 @@ jobs:
 
           - platform: linux_glibc-x86_64
             target: x86_64-unknown-linux-gnu
-            os: ubuntu-latest
-            bin: petpet
-            
-          - platform: linux_glibc-i686
-            target: i686-unknown-linux-gnu
             os: ubuntu-latest
             bin: petpet
             
@@ -87,7 +82,6 @@ jobs:
       - name: Pre-Release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: body.md
           files: ${{ matrix.target }}.tar
           tag_name: 2.0.1-${{ steps.vars.outputs.sha_short }}
           prerelease: true
