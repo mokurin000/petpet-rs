@@ -2,7 +2,13 @@
 
 [![crates.io](https://img.shields.io/crates/v/petpet.svg)](https://crates.io/crates/petpet)
 
+[![Example Image](https://user-images.githubusercontent.com/34085039/129224045-41649633-7fb1-4bdf-85ce-eadfac183c3d.gif)](https://yande.re/post/show/304166)
+
 Also [petpet](https://github.com/camprevail/pet-pet-gif/), but in Rust.
+
+The default hands' images were credited by [PetPet Generator](https://benisland.neocities.org/petpet/).
+
+[Here](https://github.com/poly000/awesome-petpet-hands) you can download more custom hands.
 
 **Note:** crates.io's version is outdated.
 
