@@ -1,8 +1,6 @@
 #![feature(once_cell)]
-use std::fs::File;
 use std::io::Write;
 use std::lazy::SyncLazy;
-use std::path::Path;
 
 use image::error::ImageResult;
 use image::Frame;
@@ -16,14 +14,6 @@ use image::imageops::overlay;
 use image::imageops::resize;
 
 pub use image::imageops::FilterType;
-
-pub fn file_to_gif(input: impl AsRef<Path>, output: impl AsRef<Path>, speed: i32, filter: FilterType) -> Result<(), Box<dyn std::error::Error>> {
-    let input_image = image::open(&input)?.to_rgba8();
-    let frames = generate(input_image, filter)?;
-    let output = File::open(output)?;
-    encode_gif(frames, output, speed)?;
-    Ok(())
-}
 
 const FRAMES: u32 = 10;
 const RESOLUTION: (u32, u32) = (112, 112);
