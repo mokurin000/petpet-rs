@@ -13,7 +13,7 @@ pub fn file_to_gif(
 ) -> Result<(), Box<dyn std::error::Error>> {
     let input_image = image::open(&input)?.to_rgba8();
     let frames = generate(input_image, filter)?;
-    let output = File::open(output)?;
+    let output = File::create(output)?;
     encode_gif(frames, output, speed)?;
     Ok(())
 }
