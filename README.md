@@ -10,6 +10,8 @@ The default hands' images were credited by [PetPet Generator](https://benisland.
 
 [Here](https://github.com/poly000/awesome-petpet-hands) you can download more custom hands.
 
+You need to replace petpet images in src/res then **recompile** petpet.
+
 **Note:** crates.io's version is outdated.
 
 ## Download
@@ -40,4 +42,4 @@ otherwise you will get an error like `Bad Signature`!
 
 - [x] transparent background: [#1](https://github.com/poly000/petpet-rs/issues/1)
 
-- [ ] Upload v1.0.0 to crates.io: [#2](https://github.com/poly000/petpet-rs/issues/2)
+- [ ] Upload new version to crates.io: [#2](https://github.com/poly000/petpet-rs/issues/2)
