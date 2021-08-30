@@ -3,7 +3,7 @@ use std::io::Write;
 use std::lazy::SyncLazy;
 
 use image::error::ImageResult;
-use image::Frame;
+use image::{Frame, ImageError, ImageFormat};
 use image::{Rgba, RgbaImage};
 
 use image::codecs::gif::GifEncoder;
@@ -17,21 +17,31 @@ pub use image::imageops::FilterType;
 
 const FRAMES: u32 = 10;
 const RESOLUTION: (u32, u32) = (112, 112);
-static HANDS: SyncLazy<Vec<RgbaImage>> = SyncLazy::new(|| {
-    (0..5)
-        .map(|num| format!("{}.png", num))
-        .map(|file| {
-            use std::path::PathBuf;
-            let mut path = PathBuf::from(".");
-            path.push("res");
-            path.push(file);
 
-            image::open(&path)
-                .unwrap_or_else(|_| panic!("Could not load image at {:?}", path))
-                .to_rgba8()
-        })
-        .collect()
+mod hand_raw {
+    pub static HAND_0: &[u8; 15758] = include_bytes!("res/0.png");
+    pub static HAND_1: &[u8; 16013] = include_bytes!("res/1.png");
+    pub static HAND_2: &[u8; 16284] = include_bytes!("res/2.png");
+    pub static HAND_3: &[u8; 16199] = include_bytes!("res/3.png");
+    pub static HAND_4: &[u8; 14816] = include_bytes!("res/4.png");
+}
+
+static HANDS: SyncLazy<Vec<RgbaImage>> = SyncLazy::new(||{
+    let mut re = Vec::with_capacity(5);
+    re.push(load_png(hand_raw::HAND_0).unwrap());
+    re.push(load_png(hand_raw::HAND_1).unwrap());
+    re.push(load_png(hand_raw::HAND_2).unwrap());
+    re.push(load_png(hand_raw::HAND_3).unwrap());
+    re.push(load_png(hand_raw::HAND_4).unwrap());
+    re
 });
+
+fn load_png(buf: &[u8]) -> Result<RgbaImage, ImageError> {
+    use image::load_from_memory_with_format;
+
+    let dyn_image = load_from_memory_with_format(buf, ImageFormat::Png)?;
+    Ok(dyn_image.to_rgba8())
+}
 
 /// Generate frames overlayed hands.
 ///
