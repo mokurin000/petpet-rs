@@ -43,3 +43,7 @@ otherwise you will get an error like `Bad Signature`!
 - [x] transparent background: [#1](https://github.com/poly000/petpet-rs/issues/1)
 
 - [ ] Upload new version to crates.io: [#2](https://github.com/poly000/petpet-rs/issues/2)
+
+# Clicks
+
+![:petpet](https://count.getloli.com/get/@:petpet)
