@@ -34,7 +34,7 @@ cargo +nightly run --release -- <input_image> <output_gif> <encode_speed>
 
 ![more visual performance line chart](img/speed_to_cpu-time.png)
 
-Note that **format of the input image must be the same as suffix name explains**,
+Note that **format of the input image must be the same as its extension explains**,
 
 otherwise you will get an error like `Bad Signature`!
 
