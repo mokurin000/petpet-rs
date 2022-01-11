@@ -34,7 +34,7 @@ cargo +nightly run --release -- <input_image> <output_gif> <encode_speed>
 
 ![more visual performance line chart](img/speed_to_cpu-time.png)
 
-Note that **format of the input image must be the same as suffix name explains**,
+Note that **format of the input image must be the same as its extension explains**,
 
 otherwise you will get an error like `Bad Signature`!
 
@@ -43,3 +43,7 @@ otherwise you will get an error like `Bad Signature`!
 - [x] transparent background: [#1](https://github.com/poly000/petpet-rs/issues/1)
 
 - [ ] Upload new version to crates.io: [#2](https://github.com/poly000/petpet-rs/issues/2)
+
+# Clicks
+
+![:petpet](https://count.getloli.com/get/@:petpet)
