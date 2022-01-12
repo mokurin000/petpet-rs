@@ -2,6 +2,8 @@
 use std::io::Write;
 use std::lazy::SyncLazy;
 
+pub use image; // so users could use `petpet::image`
+
 use image::error::ImageResult;
 use image::{Frame, ImageError, ImageFormat};
 use image::{Rgba, RgbaImage};
