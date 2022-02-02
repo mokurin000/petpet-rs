@@ -9,7 +9,7 @@ repository = "https://github.com/poly000/petpet-rs"
 default-run = "petpet"
 
 [dependencies]
-image = { git = "https://github.com/poly000/image", branch = "master"}
+image = "0.24.0"
 
 [profile.release]
 codegen-units = 1
