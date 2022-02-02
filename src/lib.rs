@@ -63,8 +63,8 @@ pub fn generate(
         let width = (width_scale * RESOLUTION.0 as f64) as u32;
         let height = (height_scale * RESOLUTION.1 as f64) as u32;
 
-        let offset_x = (((1.0 - width_scale) * 0.5 + 0.1) * RESOLUTION.0 as f64) as u32;
-        let offset_y = (((1.0 - height_scale) - 0.08) * RESOLUTION.1 as f64) as u32;
+        let offset_x = (((1.0 - width_scale) * 0.5 + 0.1) * RESOLUTION.0 as f64) as i64;
+        let offset_y = (((1.0 - height_scale) - 0.08) * RESOLUTION.1 as f64) as i64;
 
         let calucate_then_resize = resize(&image, width, height, filter);
 
