@@ -1,6 +1,7 @@
-use once_cell::sync::Lazy;
+#![feature(once_cell)]
 
 use std::io::Write;
+use std::sync::OnceLock;
 
 use image::error::ImageResult;
 use image::{Frame, ImageError, ImageFormat};
@@ -19,15 +20,7 @@ const FRAMES: u32 = 10;
 const RESOLUTION: (u32, u32) = (112, 112);
 
 mod hand_raw;
-static HANDS: Lazy<[RgbaImage; 5]> = Lazy::new(|| {
-    [
-        load_png(hand_raw::HAND_0).unwrap(),
-        load_png(hand_raw::HAND_1).unwrap(),
-        load_png(hand_raw::HAND_2).unwrap(),
-        load_png(hand_raw::HAND_3).unwrap(),
-        load_png(hand_raw::HAND_4).unwrap(),
-    ]
-});
+static HANDS: OnceLock<[RgbaImage; 5]> = OnceLock::new();
 
 fn load_png(buf: &[u8]) -> Result<RgbaImage, ImageError> {
     use image::load_from_memory_with_format;
@@ -44,6 +37,16 @@ pub fn generate(
     filter: FilterType,
 ) -> ImageResult<impl IntoIterator<Item = Frame>> {
     let mut frames = Vec::<Frame>::new();
+
+    HANDS.get_or_init(|| {
+        [
+            load_png(hand_raw::HAND_0).unwrap(),
+            load_png(hand_raw::HAND_1).unwrap(),
+            load_png(hand_raw::HAND_2).unwrap(),
+            load_png(hand_raw::HAND_3).unwrap(),
+            load_png(hand_raw::HAND_4).unwrap(),
+        ]
+    });
 
     for i in 0..FRAMES {
         let squeeze = if i < FRAMES / 2 { i } else { FRAMES - i } as f64;
@@ -68,7 +71,7 @@ pub fn generate(
             offset_y,
         );
 
-        for (pixel_hand, pixel_canvas) in HANDS[i as usize / 2]
+        for (pixel_hand, pixel_canvas) in HANDS.get().unwrap()[i as usize / 2]
             .pixels()
             .zip(resize_then_overlay.pixels_mut())
         {

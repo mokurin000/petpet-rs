@@ -6,11 +6,11 @@
 
 Also [petpet](https://github.com/camprevail/pet-pet-gif/), but in Rust.
 
-The default hands' images were credited by [PetPet Generator](https://benisland.neocities.org/petpet/).
+The default hands images were credited by [PetPet Generator](https://benisland.neocities.org/petpet/).
 
 [Here](https://github.com/poly000/awesome-petpet-hands) you can download more custom hands.
 
-You need to replace petpet images in src/res then **recompile** petpet.
+You can replace hand images in src/res then **recompile** petpet.
 
 **Note:** crates.io's version is outdated.
 
@@ -27,7 +27,7 @@ cargo +nightly build --release
 ## Usage
 
 ```bash
-cargo run --release -- <input_image> <output_gif> <encode_speed>
+cargo +nightly run --release -- <input_image> <output_gif> <encode_speed>
 ```
 
 **[details about encode_speed](https://doc.servo.org/color_quant/struct.NeuQuant.html#method.new)**
