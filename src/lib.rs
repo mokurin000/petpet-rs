@@ -1,8 +1,6 @@
-#![feature(once_cell)]
-use std::io::Write;
-use std::lazy::SyncLazy;
+use once_cell::sync::Lazy;
 
-pub use image; // so users could use `petpet::image`
+use std::io::Write;
 
 use image::error::ImageResult;
 use image::{Frame, ImageError, ImageFormat};
@@ -20,22 +18,15 @@ pub use image::imageops::FilterType;
 const FRAMES: u32 = 10;
 const RESOLUTION: (u32, u32) = (112, 112);
 
-mod hand_raw {
-    pub static HAND_0: &[u8; 15758] = include_bytes!("res/0.png");
-    pub static HAND_1: &[u8; 16013] = include_bytes!("res/1.png");
-    pub static HAND_2: &[u8; 16284] = include_bytes!("res/2.png");
-    pub static HAND_3: &[u8; 16199] = include_bytes!("res/3.png");
-    pub static HAND_4: &[u8; 14816] = include_bytes!("res/4.png");
-}
-
-static HANDS: SyncLazy<Vec<RgbaImage>> = SyncLazy::new(||{
-    let mut re = Vec::with_capacity(5);
-    re.push(load_png(hand_raw::HAND_0).unwrap());
-    re.push(load_png(hand_raw::HAND_1).unwrap());
-    re.push(load_png(hand_raw::HAND_2).unwrap());
-    re.push(load_png(hand_raw::HAND_3).unwrap());
-    re.push(load_png(hand_raw::HAND_4).unwrap());
-    re
+mod hand_raw;
+static HANDS: Lazy<[RgbaImage; 5]> = Lazy::new(|| {
+    [
+        load_png(hand_raw::HAND_0).unwrap(),
+        load_png(hand_raw::HAND_1).unwrap(),
+        load_png(hand_raw::HAND_2).unwrap(),
+        load_png(hand_raw::HAND_3).unwrap(),
+        load_png(hand_raw::HAND_4).unwrap(),
+    ]
 });
 
 fn load_png(buf: &[u8]) -> Result<RgbaImage, ImageError> {

@@ -27,7 +27,7 @@ cargo +nightly build --release
 ## Usage
 
 ```bash
-cargo +nightly run --release -- <input_image> <output_gif> <encode_speed>
+cargo run --release -- <input_image> <output_gif> <encode_speed>
 ```
 
 **[details about encode_speed](https://doc.servo.org/color_quant/struct.NeuQuant.html#method.new)**
