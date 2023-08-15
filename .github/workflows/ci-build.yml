@@ -72,12 +72,12 @@ jobs:
           fi
           
           tar -cvf ${{ matrix.target }}.tar orig LICENSE.txt ${{ matrix.bin }} img/speed_to_cpu-time.png
-          
+        
       - name: Declare some variables # https://stackoverflow.com/a/61699863
         id: vars
         shell: bash
         run: |
-          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Pre-Release
         uses: softprops/action-gh-release@v1
