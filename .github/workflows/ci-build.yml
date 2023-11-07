@@ -66,11 +66,7 @@ jobs:
       - name: Prepare assets
         shell: bash
         run: |
-          mv target/${{ matrix.target }}/release/${{ matrix.bin }} .
-          if [[ ${{ matrix.target }} != x86_64-apple-darwin ]]
-          then strip ${{ matrix.bin }}
-          fi
-          
+          mv target/${{ matrix.target }}/release/${{ matrix.bin }} .          
           tar -cvf ${{ matrix.target }}.tar orig LICENSE.txt ${{ matrix.bin }} img/speed_to_cpu-time.png
         
       - name: Declare some variables # https://stackoverflow.com/a/61699863
