@@ -4,7 +4,8 @@ name: Build Canary Version
 
 on:
   push:
-    branches: [ master ]
+    tags:
+      - v*
 
 jobs:
   release:
@@ -34,5 +35,5 @@ jobs:
         with:
           body_path: body.md
           tag_name: ${{ steps.vars.outputs.petpet_ver }}-${{ steps.vars.outputs.sha_short }}
-          prerelease: true
+          prerelease: false
 

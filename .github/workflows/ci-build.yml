@@ -4,7 +4,8 @@ name: Build Canary Version
 
 on:
   push:
-    branches: [ master ]
+    tags:
+      - v*
 
 jobs:
   release:
@@ -75,6 +76,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ matrix.target }}.tar
-          tag_name: 2.1.0-${{ steps.vars.outputs.sha_short }}
-          prerelease: true
+          tag_name: ${{ steps.vars.outputs.petpet_ver }}-${{ steps.vars.outputs.sha_short }}
+          prerelease: false
+          
 
