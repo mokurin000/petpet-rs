@@ -9,6 +9,8 @@ edition = "2021"
 repository = "https://github.com/poly000/petpet-rs"
 default-run = "petpet"
 
+exclude = ["**/*.raw"]
+
 [dependencies]
 image = { version = "0.24.0", default-features = false }
 
