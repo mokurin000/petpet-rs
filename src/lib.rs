@@ -3,8 +3,8 @@ use std::sync::OnceLock;
 
 use hand_raw::HANDS_WEBP;
 use image::error::ImageResult;
-use image::RgbaImage;
 use image::{Frame, ImageError, ImageFormat};
+use image::{GenericImageView, Rgba, RgbaImage};
 
 use image::codecs::gif::GifEncoder;
 use image::codecs::gif::Repeat;
@@ -15,9 +15,9 @@ use image::imageops::resize;
 
 pub use image::imageops::FilterType;
 
-const FRAMES: u32 = 10;
+const FRAMES: usize = 10;
 const FRAME_DELAY: u32 = 20;
-const HAND_HEIGHT_WIDTH: u32 = 112;
+pub const HAND_HEIGHT_WIDTH: u32 = 112;
 
 mod hand_raw;
 static HANDS_RGBA: OnceLock<[RgbaImage; 5]> = OnceLock::new();
@@ -36,14 +36,21 @@ pub fn generate(
     image: RgbaImage,
     filter: FilterType,
 ) -> ImageResult<impl IntoIterator<Item = Frame>> {
-    Ok((0..FRAMES).map(move |num| encode_single_frame(&image, filter, num)))
+    let hands = HANDS_RGBA.get_or_init(|| HANDS_WEBP.map(|img| load_hand_webp(img).unwrap()));
+    Ok((0..FRAMES).map(move |num| encode_single_frame(num, &image, filter, hands)))
 }
 
-fn encode_single_frame(image: &RgbaImage, filter: FilterType, num: u32) -> image::Frame {
-    let hands = HANDS_RGBA.get_or_init(|| HANDS_WEBP.map(|img| load_hand_webp(img).unwrap()));
-
+/// encode a petpet frame
+/// 
+/// accepts `hands` where they have same size with `HANDS_HEIGHT_WIDTH`
+/// 
+pub fn encode_single_frame(
+    num: usize,
+    image: &RgbaImage,
+    filter: FilterType,
+    hands: &[impl GenericImageView<Pixel = Rgba<u8>>; FRAMES / 2],
+) -> image::Frame {
     let squeeze = if num < FRAMES / 2 { num } else { FRAMES - num } as f64;
-
     let width_scale = 0.8 + squeeze * 0.02;
     let height_scale = 0.8 - squeeze * 0.05;
 
@@ -64,8 +71,8 @@ fn encode_single_frame(image: &RgbaImage, filter: FilterType, num: u32) -> image
         offset_y,
     );
 
-    let overlay_hand = &hands[num as usize / 2];
-    overlay(&mut composited_image, overlay_hand, 0, 0);
+    let hand_overlay = &hands[num as usize / 2];
+    overlay(&mut composited_image, hand_overlay, 0, 0);
 
     let frame_with_delay = Frame::from_parts(
         composited_image,
