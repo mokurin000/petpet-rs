@@ -5,6 +5,3 @@
 Alpline等 linux 发行版用户请使用 `-musl` 。
 
 iOS 的 [iSH](https://ish.app) 用户请使用 `i686-unknown-linux-musl`
-
-### 现在会编译时将图像读入内存
-

@@ -25,12 +25,14 @@ jobs:
         id: vars
         shell: bash
         run: |
-          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          petpet_ver=$(cargo metadata --format-version 1 --no-deps | sed -r 's/.*"version":"([^"]*)".*/\1/')
+          echo "petpet_ver=${petpet_ver}" >> $GITHUB_OUTPUT
 
       - name: Body
         uses: softprops/action-gh-release@v1
         with:
           body_path: body.md
-          tag_name: 2.1.0-${{ steps.vars.outputs.sha_short }}
+          tag_name: ${{ steps.vars.outputs.petpet_ver }}-${{ steps.vars.outputs.sha_short }}
           prerelease: true
 
