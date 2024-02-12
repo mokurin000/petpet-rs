@@ -68,7 +68,6 @@ jobs:
         id: vars
         shell: bash
         run: |
-          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
           petpet_ver=$(cargo metadata --format-version 1 --no-deps | sed -r 's/.*"version":"([^"]*)".*/\1/')
           echo "petpet_ver=${petpet_ver}" >> $GITHUB_OUTPUT
 
@@ -76,7 +75,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ matrix.target }}.tar
-          tag_name: ${{ steps.vars.outputs.petpet_ver }}-${{ steps.vars.outputs.sha_short }}
+          tag_name: v${{ steps.vars.outputs.petpet_ver }}
           prerelease: false
           
 
