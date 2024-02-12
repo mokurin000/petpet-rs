@@ -1,11 +1,9 @@
-#![feature(once_cell)]
-
 use std::io::Write;
 use std::sync::OnceLock;
 
 use image::error::ImageResult;
+use image::RgbaImage;
 use image::{Frame, ImageError, ImageFormat};
-use image::{Rgba, RgbaImage};
 
 use image::codecs::gif::GifEncoder;
 use image::codecs::gif::Repeat;
@@ -17,7 +15,8 @@ use image::imageops::resize;
 pub use image::imageops::FilterType;
 
 const FRAMES: u32 = 10;
-const RESOLUTION: (u32, u32) = (112, 112);
+const FRAME_DELAY: u32 = 20;
+const HAND_HEIGHT_WIDTH: u32 = 112;
 
 mod hand_raw;
 static HANDS: OnceLock<[RgbaImage; 5]> = OnceLock::new();
@@ -38,7 +37,7 @@ pub fn generate(
 ) -> ImageResult<impl IntoIterator<Item = Frame>> {
     let mut frames = Vec::<Frame>::new();
 
-    HANDS.get_or_init(|| {
+    let hands = HANDS.get_or_init(|| {
         [
             load_png(hand_raw::HAND_0).unwrap(),
             load_png(hand_raw::HAND_1).unwrap(),
@@ -54,41 +53,34 @@ pub fn generate(
         let width_scale = 0.8 + squeeze * 0.02;
         let height_scale = 0.8 - squeeze * 0.05;
 
-        let width = (width_scale * RESOLUTION.0 as f64) as u32;
-        let height = (height_scale * RESOLUTION.1 as f64) as u32;
+        let width = (width_scale * HAND_HEIGHT_WIDTH as f64) as u32;
+        let height = (height_scale * HAND_HEIGHT_WIDTH as f64) as u32;
 
-        let offset_x = (((1.0 - width_scale) * 0.5 + 0.1) * RESOLUTION.0 as f64) as i64;
-        let offset_y = (((1.0 - height_scale) - 0.08) * RESOLUTION.1 as f64) as i64;
+        let offset_x = (((1.0 - width_scale) * 0.5 + 0.1) * HAND_HEIGHT_WIDTH as f64) as i64;
+        let offset_y = (((1.0 - height_scale) - 0.08) * HAND_HEIGHT_WIDTH as f64) as i64;
 
-        let calucate_then_resize = resize(&image, width, height, filter);
+        let resized_background = resize(&image, width, height, filter);
 
-        let mut resize_then_overlay = RgbaImage::new(RESOLUTION.0, RESOLUTION.1);
+        let mut composited_image = RgbaImage::new(HAND_HEIGHT_WIDTH, HAND_HEIGHT_WIDTH);
 
         overlay(
-            &mut resize_then_overlay,
-            &calucate_then_resize,
+            &mut composited_image,
+            &resized_background,
             offset_x,
             offset_y,
         );
 
-        for (pixel_hand, pixel_canvas) in HANDS.get().unwrap()[i as usize / 2]
-            .pixels()
-            .zip(resize_then_overlay.pixels_mut())
-        {
-            if !matches!(pixel_hand, Rgba([_, _, _, 0])) {
-                *pixel_canvas = *pixel_hand;
-            }
-        }
+        let overlay_hand = &hands[i as usize / 2];
+        overlay(&mut composited_image, overlay_hand, 0, 0);
 
-        const DELAY: u32 = 20;
-        let overlay_then_delay = Frame::from_parts(
-            resize_then_overlay,
+        let frame_with_delay = Frame::from_parts(
+            composited_image,
             0,
             0,
-            Delay::from_numer_denom_ms(DELAY, 1),
+            Delay::from_numer_denom_ms(FRAME_DELAY, 1),
         );
 
-        frames.push(overlay_then_delay);
+        frames.push(frame_with_delay);
     }
     Ok(frames)
 }

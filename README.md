@@ -21,13 +21,13 @@ You can download the latest release from [releases](https://github.com/poly000/p
 ## Build
 
 ```bash
-cargo +nightly build --release
+cargo build --release
 ```
 
 ## Usage
 
 ```bash
-cargo +nightly run --release -- <input_image> <output_gif> <encode_speed>
+cargo run --release -- <input_image> <output_gif> <encode_speed>
 ```
 
 **[details about encode_speed](https://doc.servo.org/color_quant/struct.NeuQuant.html#method.new)**

@@ -5,7 +5,7 @@ use std::path::Path;
 use petpet::FilterType;
 use petpet::{encode_gif, generate};
 
-pub fn file_to_gif(
+pub fn encode_petpet_gif(
     input: impl AsRef<Path>,
     output: impl AsRef<Path>,
     speed: i32,
@@ -26,5 +26,5 @@ fn main() {
     let output = args.next().expect("output file is required!");
     let speed = args.next().expect("speed is required!").parse().unwrap();
 
-    file_to_gif(&input, &output, speed, FilterType::Lanczos3).unwrap();
+    encode_petpet_gif(&input, &output, speed, FilterType::Lanczos3).unwrap();
 }
