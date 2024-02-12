@@ -43,7 +43,7 @@ fn decode_webp_hands() -> Result<(), Box<dyn Error>> {
         let hand = image::open(hand_path)?;
         assert_eq!(hand.height(), 112);
         assert_eq!(hand.width(), 112);
-        let raw_buffer = hand.to_rgb8().into_raw();
+        let raw_buffer = hand.to_rgba8().into_raw();
         fs::write(raw_hand_path, raw_buffer)?;
     }
 

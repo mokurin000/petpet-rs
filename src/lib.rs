@@ -110,3 +110,6 @@ mod encode_gif;
 pub use encode_gif::encode_gif;
 
 mod hands;
+
+#[cfg(feature = "image")]
+pub use image;

@@ -56,7 +56,7 @@ jobs:
           toolchain: stable
 
       - name: Build executable
-        run: cargo build --release --target ${{ matrix.target }}
+        run: cargo build --release --target ${{ matrix.target }} -F more_format
 
       - name: Prepare assets
         shell: bash
