@@ -1,7 +1,7 @@
 use std::io::Write;
 use std::sync::OnceLock;
 
-use hand_raw::HANDS_PNG;
+use hand_raw::HANDS_WEBP;
 use image::error::ImageResult;
 use image::RgbaImage;
 use image::{Frame, ImageError, ImageFormat};
@@ -22,10 +22,10 @@ const HAND_HEIGHT_WIDTH: u32 = 112;
 mod hand_raw;
 static HANDS_RGBA: OnceLock<[RgbaImage; 5]> = OnceLock::new();
 
-fn load_png(buf: &[u8]) -> Result<RgbaImage, ImageError> {
+fn load_hand_webp(buf: &[u8]) -> Result<RgbaImage, ImageError> {
     use image::load_from_memory_with_format;
 
-    let dyn_image = load_from_memory_with_format(buf, ImageFormat::Png)?;
+    let dyn_image = load_from_memory_with_format(buf, ImageFormat::WebP)?;
     Ok(dyn_image.to_rgba8())
 }
 
@@ -38,7 +38,7 @@ pub fn generate(
 ) -> ImageResult<impl IntoIterator<Item = Frame>> {
     let mut frames = Vec::<Frame>::new();
 
-    let hands = HANDS_RGBA.get_or_init(|| HANDS_PNG.map(|img| load_png(img).unwrap()));
+    let hands = HANDS_RGBA.get_or_init(|| HANDS_WEBP.map(|img| load_hand_webp(img).unwrap()));
 
     for i in 0..FRAMES {
         let squeeze = if i < FRAMES / 2 { i } else { FRAMES - i } as f64;

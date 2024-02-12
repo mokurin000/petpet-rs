@@ -14,8 +14,7 @@ image = "0.24.0"
 
 [profile.release]
 codegen-units = 1
-lto = true
-opt-level = "z"
+lto = "thin"
 panic = "abort"
 strip = true
 # debug = true
