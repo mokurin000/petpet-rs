@@ -1,13 +1,9 @@
-use std::io::Write;
 use std::sync::OnceLock;
 
-use hand_raw::HANDS_WEBP;
 use image::error::ImageResult;
-use image::{Frame, ImageError, ImageFormat};
+use image::{Frame, ImageError};
 use image::{GenericImageView, Rgba, RgbaImage};
 
-use image::codecs::gif::GifEncoder;
-use image::codecs::gif::Repeat;
 use image::Delay;
 
 use image::imageops::overlay;
@@ -19,14 +15,26 @@ const FRAMES: usize = 10;
 const FRAME_DELAY: u32 = 20;
 pub const HAND_HEIGHT_WIDTH: u32 = 112;
 
-mod hand_raw;
 static HANDS_RGBA: OnceLock<[RgbaImage; 5]> = OnceLock::new();
 
+#[cfg(not(feature = "bundle_raw_hands"))]
 fn load_hand_webp(buf: &[u8]) -> Result<RgbaImage, ImageError> {
     use image::load_from_memory_with_format;
 
-    let dyn_image = load_from_memory_with_format(buf, ImageFormat::WebP)?;
+    let dyn_image = load_from_memory_with_format(buf, image::ImageFormat::WebP)?;
     Ok(dyn_image.to_rgba8())
+}
+
+#[cfg(feature = "bundle_raw_hands")]
+fn load_hand_raw(buf: &[u8]) -> Result<RgbaImage, ImageError> {
+    use image::error::DecodingError;
+
+    let image = RgbaImage::from_raw(HAND_HEIGHT_WIDTH, HAND_HEIGHT_WIDTH, buf.to_vec()).ok_or(
+        ImageError::Decoding(DecodingError::from_format_hint(
+            image::error::ImageFormatHint::Unknown,
+        )),
+    )?;
+    Ok(image)
 }
 
 /// Generate frames overlayed hands.
@@ -36,14 +44,26 @@ pub fn generate(
     image: RgbaImage,
     filter: FilterType,
 ) -> ImageResult<impl IntoIterator<Item = Frame>> {
-    let hands = HANDS_RGBA.get_or_init(|| HANDS_WEBP.map(|img| load_hand_webp(img).unwrap()));
+    let hands = HANDS_RGBA.get_or_init(|| {
+        #[cfg(not(feature = "bundle_raw_hands"))]
+        {
+            use hands::HANDS_WEBP;
+            return HANDS_WEBP.map(|img| load_hand_webp(img).unwrap());
+        }
+
+        #[cfg(feature = "bundle_raw_hands")]
+        {
+            use hands::HANDS_RAW;
+            return HANDS_RAW.map(|img| load_hand_raw(img).unwrap());
+        }
+    });
     Ok((0..FRAMES).map(move |num| encode_single_frame(num, &image, filter, hands)))
 }
 
 /// encode a petpet frame
-/// 
+///
 /// accepts `hands` where they have same size with `HANDS_HEIGHT_WIDTH`
-/// 
+///
 pub fn encode_single_frame(
     num: usize,
     image: &RgbaImage,
@@ -84,22 +104,9 @@ pub fn encode_single_frame(
     frame_with_delay
 }
 
-/// Encode Frame to GIF.
-///
-/// `frames` will encode as  GIF,
-///
-/// `output` should be the path of the GIF file.
-///
-/// [speed]: https://doc.servo.org/color_quant/struct.NeuQuant.html#method.new
-///
-/// for details of speed, please see Servo's [documents][speed].
-pub fn encode_gif(
-    frames: impl IntoIterator<Item = Frame>,
-    output: impl Write,
-    speed: i32,
-) -> ImageResult<()> {
-    let mut encoder = GifEncoder::new_with_speed(output, speed);
-    encoder.set_repeat(Repeat::Infinite)?;
-    encoder.encode_frames(frames)?;
-    Ok(())
-}
+#[cfg(feature = "encode_to_gif")]
+mod encode_gif;
+#[cfg(feature = "encode_to_gif")]
+pub use encode_gif::encode_gif;
+
+mod hands;

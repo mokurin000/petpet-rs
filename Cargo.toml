@@ -10,11 +10,18 @@ repository = "https://github.com/poly000/petpet-rs"
 default-run = "petpet"
 
 [dependencies]
-image = "0.24.0"
+image = { version = "0.24.0", default-features = false }
+
+[build-dependencies]
+image = { version = "0.24.0", optional = true, default-features = false }
 
 [profile.release]
 codegen-units = 1
 lto = "thin"
 panic = "abort"
 strip = true
-# debug = true
+
+[features]
+default = ["encode_to_gif", "bundle_raw_hands"]
+bundle_raw_hands = ["dep:image", "image/webp"]
+encode_to_gif = ["image/gif"]
