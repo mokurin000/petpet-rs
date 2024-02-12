@@ -46,22 +46,16 @@ jobs:
             bin: petpet.exe
             
     steps:
-      - name: Install toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          target: ${{ matrix.target }}
-          toolchain: nightly
-          override: true
-
       - name: Checkout code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
-      - name: Run code build
-        uses: actions-rs/cargo@v1
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: nightly
-          command: build
-          args: --release --target ${{ matrix.target }}
+          targets: ${{ matrix.target }}
+          toolchain: stable
+
+      - name: Build executable
+        run: cargo build --release --target ${{ matrix.target }}
 
       - name: Prepare assets
         shell: bash
