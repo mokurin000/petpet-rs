@@ -1,6 +1,7 @@
 use std::io::Write;
 use std::sync::OnceLock;
 
+use hand_raw::HANDS_PNG;
 use image::error::ImageResult;
 use image::RgbaImage;
 use image::{Frame, ImageError, ImageFormat};
@@ -19,7 +20,7 @@ const FRAME_DELAY: u32 = 20;
 const HAND_HEIGHT_WIDTH: u32 = 112;
 
 mod hand_raw;
-static HANDS: OnceLock<[RgbaImage; 5]> = OnceLock::new();
+static HANDS_RGBA: OnceLock<[RgbaImage; 5]> = OnceLock::new();
 
 fn load_png(buf: &[u8]) -> Result<RgbaImage, ImageError> {
     use image::load_from_memory_with_format;
@@ -37,15 +38,7 @@ pub fn generate(
 ) -> ImageResult<impl IntoIterator<Item = Frame>> {
     let mut frames = Vec::<Frame>::new();
 
-    let hands = HANDS.get_or_init(|| {
-        [
-            load_png(hand_raw::HAND_0).unwrap(),
-            load_png(hand_raw::HAND_1).unwrap(),
-            load_png(hand_raw::HAND_2).unwrap(),
-            load_png(hand_raw::HAND_3).unwrap(),
-            load_png(hand_raw::HAND_4).unwrap(),
-        ]
-    });
+    let hands = HANDS_RGBA.get_or_init(|| HANDS_PNG.map(|img| load_png(img).unwrap()));
 
     for i in 0..FRAMES {
         let squeeze = if i < FRAMES / 2 { i } else { FRAMES - i } as f64;
