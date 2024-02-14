@@ -137,7 +137,7 @@ dependencies = [
 
 [[package]]
 name = "petpet"
-version = "2.4.1"
+version = "2.4.2"
 dependencies = [
  "apng",
  "image",

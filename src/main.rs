@@ -16,7 +16,7 @@ fn main() {
     #[cfg(feature = "encode_to_apng")]
     encode_petpet_apng(
         &input,
-        &output.replace(".gif", ".apng"),
+        &output.replace(".gif", ".png"),
         petpet::FilterType::Lanczos3,
         petpet::png::FilterType::NoFilter,
     )
