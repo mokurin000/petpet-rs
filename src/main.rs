@@ -1,8 +1,8 @@
 use std::env;
 
 fn main() {
-    #[cfg(not(feature = "encode_to_gif"))]
-    compile_error!("petpet-cli requires encode_to_gif");
+    #[cfg(not(any(feature = "encode_to_gif", feature = "encode_to_apng")))]
+    compile_error!("petpet-cli requires encode_to_gif/encode_to_apng");
 
     let mut args = env::args();
     args.next();
@@ -14,11 +14,11 @@ fn main() {
     #[cfg(feature = "encode_to_gif")]
     encode_petpet_gif(&input, &output, speed, petpet::FilterType::Lanczos3).unwrap();
     #[cfg(feature = "encode_to_apng")]
-    encode_petpet_gif(
+    encode_petpet_apng(
         &input,
         &output.replace(".gif", ".apng"),
-        speed,
         petpet::FilterType::Lanczos3,
+        petpet::png::FilterType::NoFilter,
     )
     .unwrap();
 }

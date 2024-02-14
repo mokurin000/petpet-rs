@@ -38,7 +38,7 @@ pub fn encode_apng(
     encoder.encode_all(
         images,
         Some(&apng::Frame {
-            dispose_op: Some(DisposeOp::ApngDisposeOpNone),
+            dispose_op: Some(DisposeOp::ApngDisposeOpBackground),
             blend_op: Some(BlendOp::ApngBlendOpOver),
             delay_num: Some(delay_num),
             delay_den: Some(delay_den), // num / den
