@@ -12,8 +12,6 @@ The default hands images were credited by [PetPet Generator](https://benisland.n
 
 You can replace hand images in src/res then **recompile** petpet.
 
-**Note:** crates.io's version is outdated.
-
 ## Download
 
 You can download the latest release from [releases](https://github.com/poly000/petpet-rs/releases) page.
