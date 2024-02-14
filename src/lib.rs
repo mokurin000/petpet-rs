@@ -43,6 +43,7 @@ fn load_hand_raw(buf: &[u8]) -> Result<RgbaImage, ImageError> {
 pub fn generate(
     image: RgbaImage,
     filter: FilterType,
+    delay_ms: Option<u32>,
 ) -> ImageResult<impl IntoIterator<Item = Frame>> {
     let hands = HANDS_RGBA.get_or_init(|| {
         #[cfg(not(feature = "bundle_raw_hands"))]
@@ -57,7 +58,7 @@ pub fn generate(
             return HANDS_RAW.map(|img| load_hand_raw(img).unwrap());
         }
     });
-    Ok((0..FRAMES).map(move |num| encode_single_frame(num, &image, filter, hands)))
+    Ok((0..FRAMES).map(move |num| encode_single_frame(num, delay_ms, &image, filter, hands)))
 }
 
 /// encode a petpet frame
@@ -66,6 +67,7 @@ pub fn generate(
 ///
 pub fn encode_single_frame(
     num: usize,
+    delay_ms: Option<u32>,
     image: &RgbaImage,
     filter: FilterType,
     hands: &[impl GenericImageView<Pixel = Rgba<u8>>; FRAMES / 2],
@@ -98,7 +100,7 @@ pub fn encode_single_frame(
         composited_image,
         0,
         0,
-        Delay::from_numer_denom_ms(FRAME_DELAY, 1),
+        Delay::from_numer_denom_ms(delay_ms.unwrap_or(FRAME_DELAY), 1),
     );
 
     frame_with_delay
@@ -108,6 +110,13 @@ pub fn encode_single_frame(
 mod encode_gif;
 #[cfg(feature = "encode_to_gif")]
 pub use encode_gif::encode_gif;
+
+#[cfg(feature = "encode_to_apng")]
+mod encode_apng;
+#[cfg(feature = "encode_to_apng")]
+pub use encode_apng::encode_apng;
+#[cfg(feature = "encode_to_apng")]
+pub use png;
 
 mod hands;
 
