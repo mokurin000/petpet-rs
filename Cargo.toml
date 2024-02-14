@@ -13,8 +13,7 @@ exclude = ["**/*.raw"]
 
 [dependencies]
 image = { version = "0.24.0", default-features = false }
-apng = { version = "0.3.1", optional = true }
-png = { version = "0.17.7", optional = true }
+apng = { version = "0.3.4", optional = true, features = ["png"] }
 
 [build-dependencies]
 image = { version = "0.24.0", optional = true, default-features = false }
@@ -30,7 +29,7 @@ default = ["encode_to_gif", "bundle_raw_hands", "encode_to_apng"]
 bundle_raw_hands = ["dep:image", "image/webp"]
 
 encode_to_gif = ["image/gif"]
-encode_to_apng = ["dep:apng", "dep:png"]
+encode_to_apng = ["dep:apng"]
 
 more_format = ["image/png", "image/jpeg", "image/webp"]
 image = []

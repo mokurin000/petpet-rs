@@ -114,9 +114,9 @@ pub use encode_gif::encode_gif;
 #[cfg(feature = "encode_to_apng")]
 mod encode_apng;
 #[cfg(feature = "encode_to_apng")]
-pub use encode_apng::encode_apng;
+pub use apng::image_png as png;
 #[cfg(feature = "encode_to_apng")]
-pub use png;
+pub use encode_apng::encode_apng;
 
 mod hands;
 

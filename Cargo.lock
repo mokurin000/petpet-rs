@@ -10,9 +10,9 @@ checksum = "f26201604c87b1e01bd3d98f8d5d9a8fcbb815e8cedb41ffccbeb4bf593a35fe"
 
 [[package]]
 name = "apng"
-version = "0.3.1"
+version = "0.3.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1830158ab39f587ae3f174b2ef1388d84ce194b4ee6ed3d0a6ce6077c1ee5a35"
+checksum = "0a79142fc4e25db11e703bf09431aad1488d65d2e1bb4d0f664a8f8af000054c"
 dependencies = [
  "byteorder",
  "flate2",
@@ -141,7 +141,6 @@ version = "2.4.2"
 dependencies = [
  "apng",
  "image",
- "png",
 ]
 
 [[package]]

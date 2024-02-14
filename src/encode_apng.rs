@@ -1,5 +1,6 @@
 use std::{error::Error, io::Write};
 
+use apng::image_png as png;
 use apng::{BlendOp, DisposeOp, PNGImage};
 use image::{DynamicImage, Frame};
 
